@@ -1,0 +1,25 @@
+loopback_users = none
+
+log.console = false
+log.console.level = info
+log.file.level = debug
+
+listeners.tcp.default = 5672
+listeners.ssl.default = 5671
+mqtt.listeners.tcp.default = 1883
+mqtt.listeners.ssl.default = 8883
+
+auth_mechanisms.1 = EXTERNAL
+auth_mechanisms.2 = PLAIN
+auth_mechanisms.3 = AMQPLAIN
+
+management.ssl.port = 15671
+management.ssl.cacertfile = @@PWD@@/certs/ca_certificate.pem
+management.ssl.certfile   = @@PWD@@/certs/server_shostakovich_certificate.pem
+management.ssl.keyfile    = @@PWD@@/certs/server_shostakovich_key.pem
+
+ssl_options.cacertfile = @@PWD@@/certs/ca_certificate.pem
+ssl_options.certfile   = @@PWD@@/certs/server_shostakovich_certificate.pem
+ssl_options.keyfile    = @@PWD@@/certs/server_shostakovich_key.pem
+ssl_options.verify     = verify_none
+ssl_options.fail_if_no_peer_cert = false
