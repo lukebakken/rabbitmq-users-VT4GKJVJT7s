@@ -1,7 +1,7 @@
 loopback_users = none
 
-log.console = false
-log.console.level = info
+log.console = true
+log.console.level = debug
 log.file.level = debug
 
 listeners.tcp.default = 5672
@@ -15,11 +15,11 @@ auth_mechanisms.3 = AMQPLAIN
 
 management.ssl.port = 15671
 management.ssl.cacertfile = @@PWD@@/certs/ca_certificate.pem
-management.ssl.certfile   = @@PWD@@/certs/server_shostakovich_certificate.pem
-management.ssl.keyfile    = @@PWD@@/certs/server_shostakovich_key.pem
+management.ssl.certfile   = @@PWD@@/certs/server_prokofiev.bakken.io_certificate.pem
+management.ssl.keyfile    = @@PWD@@/certs/server_prokofiev.bakken.io_key.pem
 
 ssl_options.cacertfile = @@PWD@@/certs/ca_certificate.pem
-ssl_options.certfile   = @@PWD@@/certs/server_shostakovich_certificate.pem
-ssl_options.keyfile    = @@PWD@@/certs/server_shostakovich_key.pem
+ssl_options.certfile   = @@PWD@@/certs/server_prokofiev.bakken.io_certificate.pem
+ssl_options.keyfile    = @@PWD@@/certs/server_prokofiev.bakken.io_key.pem
 ssl_options.verify     = verify_none
 ssl_options.fail_if_no_peer_cert = false
