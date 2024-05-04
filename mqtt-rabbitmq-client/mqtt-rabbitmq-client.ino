@@ -15,15 +15,15 @@ const char* mqtt_username = "guest";
 const char* mqtt_password = "guest";
 
 // NTP Server settings
-const char *ntp_server = "pool.ntp.org";     // Default NTP server
-const long gmt_offset_sec = 0;            // GMT offset in seconds (adjust for your time zone)
-const int daylight_offset_sec = 0;        // Daylight saving time offset in seconds
+const char *ntp_server = "pool.ntp.org";  // Default NTP server
+const long gmt_offset_sec = -28800;       // GMT offset in seconds (adjust for your time zone)
+const int daylight_offset_sec = 3600;     // Daylight saving time offset in seconds
 
 WiFiClientSecure espClient;
 PubSubClient mqtt_client(espClient);
 
 // SSL certificate for MQTT broker
-const char ca_cert[] = \
+const char ca_certificate[] = \
 "-----BEGIN CERTIFICATE-----\n" \
 "MIIDhjCCAm6gAwIBAgIUKB4oZ316T1t310FUiGklnC4XeaYwDQYJKoZIhvcNAQEL\n" \
 "BQAwTDE7MDkGA1UEAwwyVExTR2VuU2VsZlNpZ25lZHRSb290Q0EgMjAyNC0wNS0w\n" \
@@ -101,6 +101,10 @@ const char client_key[] = \
 "/l+CvHjXOsO8Z4SYNeWIL4c=\n" \
 "-----END PRIVATE KEY-----\n";
 
+BearSSL::X509List serverTrustedCA(ca_certificate);
+BearSSL::X509List clientRsaCert(client_certificate);
+BearSSL::PrivateKey clientPrivateKey(client_key);
+
 // Function declarations
 void connectToWiFi();
 
@@ -148,17 +152,9 @@ void syncTime() {
     }
 }
 
-/*
-//Connecting to a mqtt broker width ssl certification
-// espClient.setInsecure();
-// espClient.setCertificate(ESP_CA_cert);  // for mqtt_client verification
-// espClient.setPrivateKey(ESP_RSA_key);    // for mqtt_client verification
-*/
-
 void connectToMQTT() {
-    BearSSL::X509List serverTrustedCA(ca_cert);
     espClient.setTrustAnchors(&serverTrustedCA);
-    // espClient.setInsecure();
+    espClient.setClientRSACert(&clientRsaCert, &clientPrivateKey);
     while (!mqtt_client.connected()) {
         String client_id = "esp8266-client-" + String(WiFi.macAddress());
         Serial.printf("[INFO] connecting to MQTT Broker as %s.....\n", client_id.c_str());
@@ -189,15 +185,6 @@ void mqttCallback(char *topic, byte *payload, unsigned int length) {
     Serial.println();
     Serial.println("-----------------------");
 }
-
-/*
-void loop() {
-  mqtt_client.loop();
-  mqtt_client.publish(topic, "message sent from the esp32 to MQTT BROKER encrypted");
-  // Send a message every 10 seconds
-  delay(10000);
-}
-*/
 
 void loop() {
     if (!mqtt_client.connected()) {
