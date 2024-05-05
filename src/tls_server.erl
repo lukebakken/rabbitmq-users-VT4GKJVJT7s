@@ -7,7 +7,8 @@
 start() ->
     inets:start(),
     ssl:start(),
-    logger:set_application_level(ssl, debug),
+    %% logger:set_application_level(ssl, debug),
+    redbug:start("ssl:handshake->return",[{time,60000}]),
     {ok, [["hostname",Hostname]]} = init:get_argument(tls_server),
     %% {reuseaddr, true},
     %% {sni_fun, fun tls_server:sni_fun/1},
@@ -17,7 +18,8 @@ start() ->
         {keyfile, io_lib:format("./certs/server_~s_key.pem", [Hostname])},
         {versions, ['tlsv1.1', 'tlsv1.2']},
         {verify, verify_peer},
-        {fail_if_no_peer_cert, true}
+        {fail_if_no_peer_cert, true} %%,
+        %% {log_level, debug}
     ],
     ListenSocket = listen(SslOpts),
     accept_and_handshake(SslOpts, ListenSocket).
@@ -44,7 +46,7 @@ accept_and_handshake(SslOpts, ListenSocket) ->
     ?LOG_DEBUG("after ssl:transport_accept"),
     ?LOG_DEBUG("before ssl:handshake"),
     Result =
-        case ssl:handshake(TLSTransportSocket) of
+        case ssl:handshake(TLSTransportSocket, SslOpts, 10000) of
             {ok, S, Ext} ->
                 ?LOG_INFO("ssl:handshake Ext: ~p~n", [Ext]),
                 {ok, S};

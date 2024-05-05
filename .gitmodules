@@ -1,0 +1,3 @@
+[submodule "redbug"]
+	path = redbug
+	url = https://github.com/massemanet/redbug.git
