@@ -8,12 +8,13 @@ start() ->
     inets:start(),
     ssl:start(),
     logger:set_application_level(ssl, debug),
+    {ok, [["hostname",Hostname]]} = init:get_argument(tls_server),
     %% {reuseaddr, true},
     %% {sni_fun, fun tls_server:sni_fun/1},
     SslOpts = [
         {cacertfile, "./certs/ca_certificate.pem"},
-        {certfile, "./certs/server_prokofiev.bakken.io_certificate.pem"},
-        {keyfile, "./certs/server_prokofiev.bakken.io_key.pem"},
+        {certfile, io_lib:format("./certs/server_~s_certificate.pem", [Hostname])},
+        {keyfile, io_lib:format("./certs/server_~s_key.pem", [Hostname])},
         {versions, ['tlsv1.1', 'tlsv1.2']},
         {verify, verify_peer},
         {fail_if_no_peer_cert, true}
