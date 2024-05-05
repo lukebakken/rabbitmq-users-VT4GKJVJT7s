@@ -11,4 +11,5 @@ $ca_file   = Join-Path -Path $certs_dir -ChildPath 'ca_certificate.pem'
 $cert_file = Join-Path -Path $certs_dir -ChildPath 'client_prokofiev.bakken.io_certificate.pem'
 $key_file  = Join-Path -Path $certs_dir -ChildPath 'client_prokofiev.bakken.io_key.pem'
 
+# & openssl s_client -connect "${TlsHost}:${TlsPort}" -CAfile $ca_file -verify 8
 & openssl s_client -connect "${TlsHost}:${TlsPort}" -CAfile $ca_file -cert $cert_file -key $key_file -verify 8
