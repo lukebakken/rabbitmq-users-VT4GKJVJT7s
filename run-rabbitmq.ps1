@@ -30,7 +30,9 @@ if (!(Test-Path -Path $rabbitmq_dir))
 }
 
 $pwd_slashes = $curdir -Replace '\\','/'
-(Get-Content -Raw -Path $rabbitmq_conf_in) -Replace '@@PWD@@', $pwd_slashes | Set-Content -Path $rabbitmq_conf_out
+(Get-Content -Raw -Path $rabbitmq_conf_in) `
+    -Replace '@@PWD@@', $pwd_slashes `
+    -Replace '@@HOST@@' 'prokofiev.bakken.io' | Set-Content -Path $rabbitmq_conf_out
 
 $env:RABBITMQ_ALLOW_INPUT = 'true'
 $env:RABBITMQ_BASE = $rabbitmq_base

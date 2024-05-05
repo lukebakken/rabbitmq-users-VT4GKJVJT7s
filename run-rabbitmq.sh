@@ -13,7 +13,8 @@ then
     tar xf "rabbitmq-server-generic-unix-$rabbitmq_version.tar.xz"
 fi
 
-sed -e "s|@@PWD@@|$curdir|" "$curdir/rabbitmq.conf.in" > "$rabbitmq_etc/rabbitmq.conf"
+sed -e "s|@@PWD@@|$curdir|" "$curdir/rabbitmq.conf.in" \
+    -e 's|@@HOST@@|shostakovich-internal.bakken.io|' > "$rabbitmq_etc/rabbitmq.conf"
 cp -vf "$curdir/rmq/enabled_plugins" "$rabbitmq_etc/enabled_plugins"
 
-"$rabbitmq_sbin/rabbitmq-server"
+RABBITMQ_ALLOW_INPUT='true' LOG='debug' "$rabbitmq_sbin/rabbitmq-server"
