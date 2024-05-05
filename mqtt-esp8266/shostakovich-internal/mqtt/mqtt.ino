@@ -10,8 +10,8 @@ const char* password = "Angled-Agility2-Prism";
 const int mqtt_port = 8883; // 8883
 const char* mqtt_broker = "shostakovich-internal.bakken.io";
 const char* mqtt_topic = "test";
-const char* mqtt_username = "guest";
-const char* mqtt_password = "guest";
+const char* mqtt_username = "shostakovich-internal.bakken.io";
+const char* mqtt_password = "<unused>";
 
 // NTP Server settings
 const char *ntp_server = "pool.ntp.org";  // Default NTP server
@@ -157,7 +157,8 @@ void connectToMQTT() {
     while (!mqtt_client.connected()) {
         String client_id = "esp8266-client-" + String(WiFi.macAddress());
         Serial.printf("[INFO] connecting to MQTT Broker as %s.....\n", client_id.c_str());
-        if (mqtt_client.connect(client_id.c_str(), mqtt_username, mqtt_password)) {
+        // if (mqtt_client.connect(client_id.c_str(), mqtt_username, mqtt_password)) {
+        if (mqtt_client.connect(client_id.c_str())) {
             Serial.println("[INFO] connected to MQTT broker");
             mqtt_client.subscribe(mqtt_topic);
             // Publish message upon successful connection
